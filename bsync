@@ -272,7 +272,8 @@ def get_bsync_files(ssh, dirname):
 				if f.startswith(".bsync-"):
 					files.add(f)
 		else:
-			out = subprocess.check_output(ssh.getcmdlist()+["[ -r "+quote(dirname)+" ] && cd "+quote(dirname)+" 2>/dev/null && ( ls -1 .bsync-* 2>/dev/null || true )" ], universal_newlines=True)
+			out = subprocess.check_output(ssh.getcmdlist()+["[ -r "+quote(dirname)+" ] && cd "+quote(dirname)+" && ( ls -1 .bsync-* || true )" ], universal_newlines=True)
+			print("END")
 			files = set( out.split("\n") )
 	except (FileNotFoundError, subprocess.CalledProcessError):
 		sys.exit("Error: could not open directory: "+getdirstr(ssh,dirname)+" (is it created?)")
@@ -312,8 +313,8 @@ def ignorepath(path, ignoreset):
 	if path == b"" or path.startswith(b".bsync-"):
 		return True
 	else:
-		for ignore in ignoreset:
-			if (path+b"/").startswith(ignore.encode()):
+		for ignoreDir in ignoreset:
+			if str(path).find(ignoreDir) != -1:
 				return True
 	return False
 
