@@ -273,7 +273,6 @@ def get_bsync_files(ssh, dirname):
 					files.add(f)
 		else:
 			out = subprocess.check_output(ssh.getcmdlist()+["[ -r "+quote(dirname)+" ] && cd "+quote(dirname)+" && ( ls -1 .bsync-* || true )" ], universal_newlines=True)
-			print("END")
 			files = set( out.split("\n") )
 	except (FileNotFoundError, subprocess.CalledProcessError):
 		sys.exit("Error: could not open directory: "+getdirstr(ssh,dirname)+" (is it created?)")
